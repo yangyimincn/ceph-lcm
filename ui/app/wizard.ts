@@ -27,6 +27,10 @@ export class WizardComponent {
   step: number = 0;
   stepComponents: ComponentRef<any>[] = [];
 
+  debug = false;
+  jsonTransformer = new JSONString();
+  stringified = '';
+
   constructor(
     private error: ErrorService,
     private modal: Modal,
@@ -37,10 +41,6 @@ export class WizardComponent {
     wizard.model.subscribe((model: BaseModel) => {
       this.filledModel = model;
     });
-  }
-
-  getConfigData() {
-    return new JSONString().transform(_.get(this.filledModel, 'data', ''));
   }
 
   getVisibleSteps() {
@@ -70,6 +70,10 @@ export class WizardComponent {
       this.stepComponents.push(componentRef);
     });
     this.init(new BaseModel({}));
+  }
+
+  ngDoCheck() {
+    this.stringified = this.jsonTransformer.transform(_.get(this.filledModel, 'data', ''));
   }
 
   ngOnDestroy() {

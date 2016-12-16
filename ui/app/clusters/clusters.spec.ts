@@ -92,7 +92,7 @@ describe('Clusters Component', () => {
       dom.select('.clusters a .edit-icon').parent().click();
       expect(dom.modal().isVisible).toBeTruthy();
       fixture.detectChanges();
-      component.newCluster.data.name = dummyClusterName;
+      component.model.data.name = dummyClusterName;
       dom.click('.modal-footer .btn-primary');
       expect(dataService.cluster().postUpdate).toHaveBeenCalled();
       done();

@@ -1,5 +1,6 @@
 <div class="modal-body">
-  <form #model="ngForm">
+  <form #form="ngForm">
+    <pre *ngIf="debug">{{ stringified }}</pre>
     <div #step_container></div>
   </form>
 </div>

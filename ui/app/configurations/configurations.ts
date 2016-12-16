@@ -25,7 +25,7 @@ export class ConfigurationsComponent {
   @ViewChild(Pager) pager: Pager;
   pagedData: pagedResult = {} as pagedResult;
 
-  configurationCreationSteps = [
+  configurationSteps = [
     NameAndClusterStep,
     PlaybookStep,
     HintsStep,
