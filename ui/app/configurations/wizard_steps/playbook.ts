@@ -1,7 +1,7 @@
 import * as _ from 'lodash';
 import globals = require('../../services/globals');
 import { Component } from '@angular/core';
-import { WizardStepBase } from '../wizard_steps';
+import { WizardStepBase } from '../../wizard_step';
 import { DataService, pagedResult } from '../../services/data';
 import { WizardService } from '../../services/wizard';
 import { Playbook, PermissionGroup } from '../../models';

@@ -5,17 +5,17 @@ import { Router } from '@angular/router';
 
 import { WizardComponent } from './wizard';
 
-import { AppModule } from '../app.module';
-import { DataService, pagedResult } from '../services/data';
-import { AuthService } from '../services/auth';
-import { PlaybookConfiguration, Cluster } from '../models';
+import { AppModule } from './app.module';
+import { DataService, pagedResult } from './services/data';
+import { AuthService } from './services/auth';
+import { PlaybookConfiguration, Cluster } from './models';
 import * as _ from 'lodash';
 
-import { MockDataService, createFakeData, amount, itemsPerPage } from '../../testing/mock.data';
-import { MockAuthService } from '../../testing/mock.auth';
-import { MockRouter } from '../../testing/mock.router';
-import { DOMHelper } from '../../testing/dom';
-import globals = require('../services/globals');
+import { MockDataService, createFakeData, amount, itemsPerPage } from '../testing/mock.data';
+import { MockAuthService } from '../testing/mock.auth';
+import { MockRouter } from '../testing/mock.router';
+import { DOMHelper } from '../testing/dom';
+import globals = require('./services/globals');
 
 describe('Playbook (Plugin) Configuration wizard', () => {
   let fixture: ComponentFixture<WizardComponent>;

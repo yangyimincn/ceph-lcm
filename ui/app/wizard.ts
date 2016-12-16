@@ -4,12 +4,12 @@ import {
   ViewChild, ViewChildren, ViewContainerRef, ComponentFactoryResolver, ComponentFactory
 } from '@angular/core';
 
-import { Modal } from '../directives';
-import { ErrorService } from '../services/error';
-import { WizardService } from '../services/wizard';
-import { BaseModel } from '../models';
-import { JSONString } from '../pipes';
-import globals = require('../services/globals');
+import { Modal } from './directives';
+import { ErrorService } from './services/error';
+import { WizardService } from './services/wizard';
+import { BaseModel } from './models';
+import { JSONString } from './pipes';
+import globals = require('./services/globals');
 
 @Component({
   selector: 'wizard',
@@ -18,6 +18,8 @@ import globals = require('../services/globals');
 export class WizardComponent {
   model: BaseModel = new BaseModel({data: {}});
   filledModel: BaseModel;
+  isSingleStep = false;
+  isReadOnly = false;
   @Input() steps: any[] = [];
   @Output() saveHandler = new EventEmitter();
   @ViewChild('step_container', {read: ViewContainerRef}) stepContainer: ViewContainerRef;
@@ -42,9 +44,11 @@ export class WizardComponent {
   }
 
   getVisibleSteps() {
-    return _.filter(this.stepComponents, (component: any) => {
+    let steps = _.filter(this.stepComponents, (component: any) => {
       return component.instance.isShownInDeck();
     });
+    this.isSingleStep = steps.length === 1;
+    return steps;
   }
 
   modelIsValid(): boolean {
@@ -57,7 +61,7 @@ export class WizardComponent {
     return this.stepComponents[this.step].instance.isValid();
   }
 
-  ngAfterViewInit() {
+  ngOnInit() {
     this.stepContainer.clear();
     this.steps.forEach((component: any) => {
       let componentFactory: ComponentFactory<any> = this.resolver.resolveComponentFactory(component);
@@ -74,8 +78,9 @@ export class WizardComponent {
     });
   }
 
-  init(model: BaseModel) {
+  init(model: BaseModel, isReadOnly = false) {
     this.model = model;
+    this.isReadOnly = isReadOnly;
     this.stepComponents.forEach((component: any) => {
       component.instance.model = this.model;
       component.instance.init();

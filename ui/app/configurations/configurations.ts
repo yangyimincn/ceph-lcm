@@ -5,8 +5,7 @@ import { Router } from '@angular/router';
 import { Modal, Filter, Pager } from '../directives';
 import { DataService, pagedResult } from '../services/data';
 import { BaseModel, Cluster, Server, Playbook, PlaybookConfiguration, Execution } from '../models';
-import { WizardComponent } from './wizard';
-import { WizardStepBase } from './wizard_steps';
+import { WizardComponent } from '../wizard';
 import { NameAndClusterStep, PlaybookStep, HintsStep, ServersStep, JsonConfigurationStep } from './wizard_steps/index';
 
 @Component({
@@ -71,20 +70,24 @@ export class ConfigurationsComponent {
     return new PlaybookConfiguration({});
   }
 
-  editConfiguration(configuration: PlaybookConfiguration = null) {
+  editConfiguration(configuration: PlaybookConfiguration = null, isReadOnly = false) {
     this.model = configuration ? configuration.clone() : this.cleanModel();
-    this.wizard.init(this.model);
+    this.wizard.init(this.model, isReadOnly);
     this.modal.show();
   }
 
   save(model: BaseModel) {
-    var savePromise: Promise<BaseModel>;
+    let savePromise: Promise<BaseModel>;
+    let shouldClose = false;
     if (model.id) {
       // Update configuration
-      // model.data.configuration = JSON.parse(this.jsonConfiguration);
       savePromise = this.data.configuration().postUpdate(model.id, model);
+      shouldClose = true;
     } else {
       // Create new configuration
+      // Update and create calls expect different set of parameters
+      // thus some should be omitted
+      _.unset(model, 'data.configuration');
       savePromise = this.data.configuration().postCreate(model);
     }
     return savePromise
@@ -93,11 +96,14 @@ export class ConfigurationsComponent {
           // Seems jsdata returns the payload as a part of create response.
           // Unneeded values should be removed.
           let pureConfig = new BaseModel(
-            _.omit(configuration, ['playbook_id', 'cluster_id', 'name', 'server_ids'])
+            _.omit(configuration, ['playbook_id', 'cluster_id', 'name', 'server_ids', 'hints'])
           );
           this.model = pureConfig;
           this.wizard.init(this.model);
           this.refreshConfigurations();
+          if (shouldClose) {
+            this.modal.close();
+          }
         }
       )
       .catch(

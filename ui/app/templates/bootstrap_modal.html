@@ -12,7 +12,7 @@
           <span aria-hidden="true">&times;</span>
         </button>
         <p *ngFor="let error of errors">
-           <strong>{{error.error}}:</strong> {{error.message}}
+           {{error.message}}
         </p>
       </div>
       <ng-content></ng-content>

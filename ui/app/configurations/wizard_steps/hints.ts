@@ -1,6 +1,6 @@
 import * as _ from 'lodash';
 import { Component } from '@angular/core';
-import { WizardStepBase } from '../wizard_steps';
+import { WizardStepBase } from '../../wizard_step';
 import { DataService } from '../../services/data';
 import { WizardService } from '../../services/wizard';
 import { Hint, Playbook } from '../../models';

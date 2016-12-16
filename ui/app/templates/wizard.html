@@ -1,14 +1,18 @@
 <div class="modal-body">
   <form #model="ngForm">
-    <pre>{{ getConfigData() }}</pre>
     <div #step_container></div>
   </form>
 </div>
 <div class="modal-footer">
-  <button class="btn btn-default pull-left" (click)="modal.close();step=1">
-    Discard
+  <button
+    class="btn btn-default"
+    [ngClass]="{'pull-left': !isReadOnly || !isSingleStep}"
+    (click)="modal.close()"
+  >
+    {{ isReadOnly ? 'Close' : 'Discard' }}
   </button>
   <button
+  *ngIf="!isSingleStep"
     class="btn btn-default"
     (click)="go(-1)"
     [disabled]="getStep(-1) === null"
@@ -16,6 +20,7 @@
       &nbsp;<span class="glyphicon glyphicon-menu-left"></span>&nbsp;
   </button>
   <button
+    *ngIf="!isSingleStep"
     class="btn btn-primary"
     (click)="go(1)"
     [disabled]="getStep(1) === null || !stepIsValid()"
@@ -23,6 +28,7 @@
     Next
   </button>
   <button
+    *ngIf="!isReadOnly"
     class="btn btn-primary"
     (click)="save()"
     [disabled]="!modelIsValid()"

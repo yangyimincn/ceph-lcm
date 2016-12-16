@@ -23,7 +23,7 @@ export class Modal {
   }
 
   show(id: string = 'modal') {
-    jQuery('#' + id).modal('show');
+    jQuery('#' + id).modal({backdrop: 'static', show: true});
   }
 
   close(id: string = 'modal') {

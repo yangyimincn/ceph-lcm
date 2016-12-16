@@ -1,14 +1,8 @@
 import * as _ from 'lodash';
-import { Component, Input, Output, EventEmitter, ViewContainerRef,
-  ViewChild, Inject, forwardRef, Injectable, Host, ComponentRef, SimpleChanges } from '@angular/core';
+import { Component, Input, EventEmitter, ViewChild, ComponentRef } from '@angular/core';
+import { WizardService } from './services/wizard';
+import { BaseModel } from './models';
 
-import { DataService, pagedResult } from '../services/data';
-import { ErrorService } from '../services/error';
-import { WizardService } from '../services/wizard';
-import { BaseModel, Playbook, Cluster, Server, PlaybookConfiguration, PermissionGroup, Hint } from '../models';
-import globals = require('../services/globals');
-
-var formatJSON = require('format-json');
 
 // Transpiler component responsible for step visibility
 // Every wizard step should be wrapped into the <step> tag

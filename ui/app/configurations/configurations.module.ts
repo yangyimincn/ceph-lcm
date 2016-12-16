@@ -3,10 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 
-import {
-  ConfigurationsComponent, WizardComponent, HintComponent,
-  WizardStepContainer
-} from './index';
+import { ConfigurationsComponent, HintComponent } from './index';
 
 import { NameAndClusterStep, PlaybookStep, HintsStep, ServersStep, JsonConfigurationStep } from './wizard_steps/index';
 import { WizardService } from '../services/wizard';
@@ -15,8 +12,7 @@ import { SharedModule } from '../shared.module';
 @NgModule({
   declarations: [
     ConfigurationsComponent,
-    WizardComponent,
-    WizardStepContainer, NameAndClusterStep, PlaybookStep, HintsStep, ServersStep, JsonConfigurationStep,
+    NameAndClusterStep, PlaybookStep, HintsStep, ServersStep, JsonConfigurationStep,
     HintComponent
   ],
   imports: [
@@ -33,8 +29,7 @@ import { SharedModule } from '../shared.module';
   ],
   exports: [
     ConfigurationsComponent,
-    WizardComponent,
-    WizardStepContainer, NameAndClusterStep, PlaybookStep, HintsStep, ServersStep, JsonConfigurationStep,
+    NameAndClusterStep, PlaybookStep, HintsStep, ServersStep, JsonConfigurationStep,
     HintComponent
   ]
 })
