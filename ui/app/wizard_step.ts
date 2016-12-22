@@ -8,14 +8,14 @@ import { BaseModel } from './models';
 // Every wizard step should be wrapped into the <step> tag
 @Component({
   selector: 'step',
-  template: `<div *ngIf="isSelected()"><h1>{{title}}</h1><ng-content></ng-content></div>`
+  template: `<div *ngIf="isSelected()" class="wizard-step"><h1>{{title}}</h1><ng-content></ng-content></div>`
 })
 export class WizardStepContainer {
-  @Input() title: string = '';
+  @Input() title: string = '';  // Mandatory and unique for the single stepset
   private activeStep: ComponentRef<any>;
 
   isSelected(): boolean {
-    return _.get(this.activeStep, 'instance.stepContainer.title') === this.title;
+    return _.get(this.activeStep, 'instance.stepContainer.title', null) === this.title;
   }
 
   constructor(wizard: WizardService) {
@@ -30,6 +30,7 @@ export class WizardStepContainer {
 export class WizardStepBase {
   @ViewChild(WizardStepContainer) stepContainer: WizardStepContainer;
   model: BaseModel;
+  index = -1;
 
   initModelProperty(key: string, defaultValue: any) {
     if (!_.get(this.model, key)) {
@@ -62,5 +63,14 @@ export class WizardStepBase {
 
   ngDoCheck() {
     this.wizard.model.emit(this.model);
+  }
+}
+
+@Component({
+  template: `<step><ng-content></ng-content></step>`
+})
+export class TestWizardStep extends WizardStepBase {
+  constructor(wizard: WizardService) {
+    super(wizard);
   }
 }

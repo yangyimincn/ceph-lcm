@@ -26,8 +26,19 @@ export class Modal {
     jQuery('#' + id).modal({backdrop: 'static', show: true});
   }
 
+  isExpanded() {
+    return jQuery('#modal-dialog').hasClass('modal-lg');
+  }
+
+  toggleLarge() {
+    jQuery('#modal-dialog').toggleClass('modal-lg');
+  }
+
   close(id: string = 'modal') {
     jQuery('#' + id).modal('hide');
+    if (this.isExpanded() !== this.isLarge) {
+      setTimeout(this.toggleLarge, 500);
+    }
   }
 
   addError(error: any) {

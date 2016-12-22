@@ -6,6 +6,7 @@
 </div>
 <div class="modal-footer">
   <button
+    id="close"
     class="btn btn-default"
     [ngClass]="{'pull-left': !isReadOnly || !isSingleStep}"
     (click)="modal.close()"
@@ -13,7 +14,8 @@
     {{ isReadOnly ? 'Close' : 'Discard' }}
   </button>
   <button
-  *ngIf="!isSingleStep"
+    *ngIf="!isSingleStep"
+    id="previous"
     class="btn btn-default"
     (click)="go(-1)"
     [disabled]="getStep(-1) === null"
@@ -22,14 +24,16 @@
   </button>
   <button
     *ngIf="!isSingleStep"
+    id="next"
     class="btn btn-primary"
     (click)="go(1)"
     [disabled]="getStep(1) === null || !stepIsValid()"
   >
-    Next
+    &nbsp;<span class="glyphicon glyphicon-menu-right"></span>&nbsp;
   </button>
   <button
     *ngIf="!isReadOnly"
+    id="save"
     class="btn btn-primary"
     (click)="save()"
     [disabled]="!modelIsValid()"

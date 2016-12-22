@@ -43,6 +43,10 @@ export class WizardComponent {
     });
   }
 
+  public get currentStep(): ComponentRef<any> {
+    return this.stepComponents[this.step];
+  }
+
   getVisibleSteps() {
     let steps = _.filter(this.stepComponents, (component: any) => {
       return component.instance.isShownInDeck();
@@ -58,16 +62,16 @@ export class WizardComponent {
   }
 
   stepIsValid(): boolean {
-    return this.stepComponents[this.step].instance.isValid();
+    return this.currentStep.instance.isValid();
   }
 
   ngOnInit() {
     this.stepContainer.clear();
-    this.steps.forEach((component: any) => {
+    this.stepComponents = _.map(this.steps, (component: any) => {
       let componentFactory: ComponentFactory<any> = this.resolver.resolveComponentFactory(component);
       let componentRef = componentFactory.create(this.injector);
       this.stepContainer.insert(componentRef.hostView);
-      this.stepComponents.push(componentRef);
+      return componentRef;
     });
     this.init(new BaseModel({}));
   }
@@ -85,28 +89,32 @@ export class WizardComponent {
   init(model: BaseModel, isReadOnly = false) {
     this.model = model;
     this.isReadOnly = isReadOnly;
-    this.stepComponents.forEach((component: any) => {
+    this.stepComponents.forEach((component: any, index: number) => {
       component.instance.model = this.model;
+      component.instance.index = index;
       component.instance.init();
     });
-    this.step = _.indexOf(this.stepComponents, _.first(this.getVisibleSteps()));
+    this.step = _.first(this.getVisibleSteps()).instance.index;
     if (this.step >= 0) {
       this.go();
     }
   }
 
   renderStep() {
-    this.wizard.currentStep.emit(this.stepComponents[this.step]);
+    this.wizard.currentStep.emit(this.currentStep);
   }
 
   getStep(offset: number): number {
     let visibleSteps = this.getVisibleSteps();
-    let visibleIndex = _.indexOf(visibleSteps, this.stepComponents[this.step]);
+    let visibleIndex = _.findIndex(
+      visibleSteps,
+      (step, index) => step.instance.index === this.currentStep.instance.index
+    );
     let nextIndex = offset + visibleIndex;
     if (visibleIndex < 0 || nextIndex < 0 || nextIndex >= visibleSteps.length) {
       return null;
     }
-    return _.indexOf(this.stepComponents, visibleSteps[nextIndex]);
+    return visibleSteps[nextIndex].instance.index;
   }
 
   go(offset: number = 0) {

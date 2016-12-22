@@ -1,7 +1,6 @@
 import * as _ from 'lodash';
 import { Component } from '@angular/core';
 import { WizardStepBase } from '../../wizard_step';
-import { DataService } from '../../services/data';
 import { WizardService } from '../../services/wizard';
 
 // Cluster name adjustment
@@ -17,7 +16,7 @@ export class ClusterStep extends WizardStepBase {
     return !!_.get(this.model, 'data.name');
   }
 
-  constructor(wizard: WizardService, private data: DataService) {
+  constructor(wizard: WizardService) {
     super(wizard);
   }
 }
